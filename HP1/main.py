@@ -46,22 +46,7 @@ def determineSelection(selection):
         case 0:
             print('Goodbye!!!')
             exit()
-    input("Press any key to back Menu...")
-
-def start():
-    print("\n\t\t\tStudent Management System")
-    print("\t-------------------------------------------------\t")
-    print("/*\t1. Login\t\t\t\t*/")
-    print("/*\t2. Sign Up\t\t\t\t\t*/")
-    print("/*\t0. Exit\t\t\t\t\t\t*/")
-    print("\t-------------------------------------------------\t")
-    selection = getSelection(0, 2)
-    if selection == 0:
-        exit()
-    elif selection == 1:
-        login()
-    else:
-        signUp()
+    input("Press Enter to back Menu...\n")
 
 def main():
     print("\n\t\t\tStudent Management System")
@@ -70,20 +55,23 @@ def main():
     print("/*\t2. Sign Up\t\t\t\t\t*/")
     print("/*\t0. Exit\t\t\t\t\t\t*/")
     print("\t-------------------------------------------------\t")
+    
     selection = getSelection(0, 2)
-    if selection == 0:
-        exit()
-    elif selection == 1:
-        result = login()
+    if selection == 1:
+        while 1:
+            result = login()
 
+            if result:
+                while 1:
+                    showMenu()
+                    determineSelection(getSelection(0, 11))
+            else:
+                print("Login Fail!!! Try again !!!")
+    elif selection == 2:
+        result = signUp()
         if result:
-            while 1:
-                showMenu()
-                determineSelection(getSelection(0, 11))
-    else:
-        res = signUp()
-        if res:
             main()
-
+    elif selection == 0:
+        exit()
 if __name__ == "__main__":
     main()

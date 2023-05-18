@@ -1,6 +1,7 @@
 from helper import *
 from validate import *
 from tabulate import tabulate
+import pwinput
 
 def addNewStudent():
     info = getGeneralInformation()
@@ -27,3 +28,27 @@ def showAllStudents():
     for student in readFiles("db/students.txt"):
         students.append(student.split("-"))
     print(tabulate(students, headers=['ID', 'First Name', "Last Name", "Grade", "Sex", "Courses", "Reward"]))
+
+def login():
+    userName = getString("Please input username: ")
+    passWord = pwinput.pwinput(prompt='Password: ')
+    for account in getAccounts():
+        if userName == account.userName and passWord == account.passWord:
+            return True
+    
+    print("Username or password incorrect!!!")
+    return False
+
+def signUp():
+    userName = getString("Please input username: ")
+    passWord1 = pwinput.pwinput(prompt='Password: ')
+    passWord2 = pwinput.pwinput(prompt='Re-Password: ')
+
+    while passWord1 != passWord2:
+        print("Your password was not matching !!! Please try again !!!\n")
+        passWord1 = pwinput.pwinput(prompt='Password: ')
+        passWord2 = pwinput.pwinput(prompt='Re-Password: ')
+
+    with open("db/accounts.txt", "a") as file:
+        file.write(f"\n{userName},{passWord1}")
+        return True

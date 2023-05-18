@@ -1,5 +1,4 @@
 from validate import *
-import pwinput
 
 class Person():
     def __init__(self, fName, lName, sex) -> None:
@@ -23,7 +22,7 @@ class Student(Person):
         self.id += str(id)
 
     def toString(self):
-        return "{0}-{1}-{2}-{3}-{4}".format(self.id, self.fName, self.lName, self.grade, "Female" if self.sex == "f" else "Male")
+        return "{0}-{1}-{2}-{3}-{4}\n".format(self.id, self.fName, self.lName, self.grade, "Female" if self.sex == "f" else "Male")
 
 class Teacher(Person):
     def __init__(self, fName, lName, grade, sex, isGraduated, school):
@@ -38,7 +37,7 @@ class Teacher(Person):
         self.id += str(id)
 
     def toString(self):
-        return "{0}-{1}-{2}-{3}-{4}-{5}-{6}".format(self.id, self.fName, self.lName, self.grade, "Female" if self.sex == "f" else "Male", "True" if self.isGraduated else "False", self.school)
+        return "{0}-{1}-{2}-{3}-{4}-{5}-{6}\n".format(self.id, self.fName, self.lName, self.grade, "Female" if self.sex == "f" else "Male", "True" if self.isGraduated else "False", self.school)
     
 class Account():
     def __init__(self, userName, passWord) -> None:
@@ -51,7 +50,7 @@ class Account():
 def getGeneralInformation(obj = "Student"):
     fName = getString(f"First Name's {obj}: ")
     lName = getString(f"Last Name's {obj}: ")
-    grade = getNumber(f"Class's {obj}: ", 1, 12)
+    grade = getNumber(f"Class's {obj}: from 1 -> 12 ", 1, 12)
     sex = getByOption(f"Sex's {obj}: Female (f) or Male (m): ", ["f", "m"])
 
     return (fName, lName, grade, sex)
@@ -63,44 +62,52 @@ def handleStundetInDB(action, data, db = "db/students.txt"):
     if action == "add" :
         with open(db, "r+") as f:
             idLast = ""
-            allStudents = f.readlines()
-            if len(allStudents) == 0:
+            all = f.readlines()
+            if len(all) == 0:
                 idLast = 999
             else:
-                idLast = int(allStudents[-1].split("-")[0].split("STU")[1])
+                txtSplit = "STU" if db == "db/students.txt" else "TEA"
+                idLast = int(all[-1].split("-")[0].split(txtSplit)[1])
             data.configId(idLast)
-            f.write('\n' + data.toString())
+            f.writelines(data.toString())
 
             return True
         
     if action == "del":
         with open(db, "r") as f:
-            allStudents = f.readlines()
-            students = [student for student in allStudents if allStudents.index(student) != data]
-            print(students)
+            all = f.readlines()
+            filtered = [student for student in all if all.index(student) != data]
             with open(db, 'w') as filedata:
-                filedata.writelines(students)
+                filedata.writelines(filtered)
 
             return True
         
     if action == "upd":
         with open(db, "r") as f:
-            allStudents = f.readlines()
-            student = allStudents[data]
-            info = getGeneralInformation()
-            id = student.split("-")[0]
-            newStudent = id + "-" + info[0] + "-" + info[1] + "-" + str(info[2]) + "-" 
-            newStudent += "Female" if info[3] == "f" else "Male" + "\n"
-            allStudents[data] = newStudent
+            all = f.readlines()
+            obj = "Student" if db == "db/students.txt" else "Teacher"
+            info = getGeneralInformation(obj)
+            id = all[data].split("-")[0] # get id
+            newObj = id + "-" + info[0] + "-" + info[1] + "-" + str(info[2]) + "-" 
+            newObj += "Female" if info[3] == "f" else "Male"
+
+            if db == "db/teachers.txt":
+                isGraduated = True if getByOption("You have been graduated? (y/n): ", ['y','n']) == "y" else False
+                school = getString("Your school: ")
+                newObj += "-True" if isGraduated else "-False"
+                newObj += "-" + school
+
+            newObj += "\n"
+            all[data] = newObj
             with open(db, 'w') as filedata:
-                filedata.writelines(allStudents)
+                filedata.writelines(all)
 
             return True
     if action == "get":
         with open(db, "r") as f:
-            allStudents = f.readlines()
+            all = f.readlines()
 
-            return allStudents[data]
+            return all[data]
         
     return False
 
@@ -126,29 +133,3 @@ def chooseStudentToAction(obj = "Student"):
         else:
             return ids.index(id)
         
-
-def login():
-    userName = getString("Please input username: ")
-    passWord = pwinput.pwinput(prompt='Password: ')
-    for account in getAccounts():
-        if userName == account.userName and passWord == account.passWord:
-            return True
-    
-    print("Username or password incorrect!!!")
-    return False
-
-def signUp():
-    userName = getString("Please input userName: ")
-    pw1 = pwinput.pwinput(prompt='Password: ')
-    pw2 = pwinput.pwinput(prompt='Re-Password: ')
-
-    while pw1 != pw2:
-        print("Password was not matching!!! Try again !!!")
-        pw1 = pwinput.pwinput(prompt='Password: ')
-        pw2 = pwinput.pwinput(prompt='Re-Password: ')
-    
-    with open("db/accounts.txt", "a") as file:
-        file.writelines(f"\n{userName},{pw1}")
-    print("Sign Up Successfully!!!")
-
-    return True
