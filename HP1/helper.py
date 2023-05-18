@@ -124,7 +124,7 @@ def getAccounts():
 def getIds(db = constant.studentsDb):
     return [student.split("-")[0] for student in readFiles(db)]
 
-def chooseStudentToAction(db = constant.studentsDb):
+def chooseObjToAction(db = constant.studentsDb):
     ids = getIds() if db == constant.studentsDb else getIds(constant.teachersDb)
     idsString = ", ".join(ids)
 
@@ -141,3 +141,9 @@ def chooseStudentToAction(db = constant.studentsDb):
         
 def determineTextToShow(db = constant.studentsDb):
     return constant.student if db == constant.studentsDb else constant.teacher
+
+def determineWhatTypeOfObject(typeOfDb):
+    return constant.studentsDb if typeOfDb == constant.studentsDb else constant.teachersDb
+
+def noticeResult(type, result):
+    return type + " Successfully" if result else " Failure"

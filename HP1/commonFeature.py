@@ -3,9 +3,6 @@ from validate import *
 from tabulate import tabulate
 import constant
 
-def determineWhatTypeOfObject(typeOfDb):
-    return constant.studentsDb if typeOfDb == constant.studentsDb else constant.teachersDb
-
 def addNew(db = constant.studentsDb):
     info = getGeneralInformation(determineWhatTypeOfObject(db))
     if db == constant.studentsDb:
@@ -16,18 +13,18 @@ def addNew(db = constant.studentsDb):
         newObj = Teacher(info[0], info[1], info[2], info[3], isGraduated, school)
 
     result = handleStundetInDB('add', newObj, db)
-    print("Added Successfully" if result == True else "Added Fail")
-    
+    print(noticeResult(constant.added, result))
+
 def delete(db = constant.studentsDb):
-    result = handleStundetInDB("del", chooseStudentToAction(), db)
-    print("Deleted Successfully" if result == True else "Deleted Fail")
+    result = handleStundetInDB("del", chooseObjToAction(db), db)
+    print(noticeResult(constant.deleted, result))
 
 def update(db = constant.studentsDb):
-    result = handleStundetInDB("upd", chooseStudentToAction(), db)
-    print("Deleted Successfully" if result == True else "Deleted Fail")
+    result = handleStundetInDB("upd", chooseObjToAction(db), db)
+    print(noticeResult(constant.updated, result))
 
 def show(db = constant.studentsDb):
-    obj = handleStundetInDB("get", chooseStudentToAction(), db)
+    obj = handleStundetInDB("get", chooseObjToAction(db), db)
     objShow = [obj.split("-")]
 
     if db == constant.studentsDb:
