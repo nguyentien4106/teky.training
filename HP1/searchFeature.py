@@ -1,5 +1,6 @@
 from helper import *
 from tabulate import tabulate
+import constant
 
 def search():
     print("\n\t\tChoose Your Search Function!!!")
@@ -24,7 +25,7 @@ def search():
 def searchByName():
     name = getString("What name do you wanna search ? ")
     students = readFiles()
-    teachers = readFiles("db/teachers.txt")
+    teachers = readFiles(constant.teachersDb)
     studentsFilter = list(filter(lambda student: name in student.split("-")[1] or name in student.split("-")[2], students))
     studentFilterShow = list(map(lambda student: student.split("-"), studentsFilter))
     teachersFilter = list(filter(lambda teacher: name in teacher.split("-")[1] or name in teacher.split("-")[2], teachers))
@@ -39,7 +40,7 @@ def searchByName():
 def searchByGrade():
     grade = getNumber("What grade do you wanna search ? ", 1, 12)
     students = readFiles()
-    teachers = readFiles("db/teachers.txt")
+    teachers = readFiles(constant.teachersDb)
     studentsFilter = list(filter(lambda student: grade == int(student.split("-")[3]), students))
     studentFilterShow = list(map(lambda student: student.split("-"), studentsFilter))
     teachersFilter = list(filter(lambda teacher: grade == int(teacher.split("-")[3]), teachers))
@@ -49,12 +50,12 @@ def searchByGrade():
     print(tabulate(studentFilterShow, headers=['ID', 'First Name', "Last Name", "Grade", "Sex"]))
 
     print("\t\t\tTeachers")
-    print(tabulate(teachersFilterShow, headers=['ID', 'First Name', "Last Name", "Grade", "Sex", "isGraduated", "School"]))
+    print(tabulate(teachersFilterShow, headers=['ID', 'First Name', "Last Name", "Grade", "Sex", "Graduated", "School"]))
 
 def searchByAll():
     value = getString("Which value to search ? ")
     students = readFiles()
-    teachers = readFiles("db/teachers.txt")
+    teachers = readFiles(constant.teachersDb)
     studentsFilter = list(filter(lambda student: lambdaFunction(student, value), students))
     studentFilterShow = list(map(lambda student: student.split("-"), studentsFilter))
     teachersFilter = list(filter(lambda teacher: lambdaFunction(teacher, value), teachers))
@@ -64,7 +65,7 @@ def searchByAll():
     print(tabulate(studentFilterShow, headers=['ID', 'First Name', "Last Name", "Grade", "Sex"]))
 
     print("\t\t\tTeachers")
-    print(tabulate(teachersFilterShow, headers=['ID', 'First Name', "Last Name", "Grade", "Sex", "isGraduated", "School"]))
+    print(tabulate(teachersFilterShow, headers=['ID', 'First Name', "Last Name", "Grade", "Sex", "Graduated", "School"]))
 
 
 def lambdaFunction(student, value):

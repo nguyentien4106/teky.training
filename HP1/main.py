@@ -1,6 +1,7 @@
-from studentFeature import *
-from teacherFeature import *
-from searchFeature import search
+from searchFeature import *
+from commonFeature import *
+from auth import *
+import constant
 
 def showMenu():
     print("\n\t\t\tStudent Management System")
@@ -22,25 +23,25 @@ def showMenu():
 def determineSelection(selection):
     match selection:
         case 1:
-            addNewStudent()
+            addNew()
         case 2:
-            deleteStudent()
+            delete()
         case 3:
-            updateStudent()
+            update()
         case 4:
-            showInfo()
+            show()
         case 5:
-            showAllStudents()
+            showAll()
         case 6:
-            addNewTeacher()
+            addNew(constant.teachersDb)
         case 7:
-            deleteTeacher()
+            delete(constant.teachersDb)
         case 8:
-            updateTeacher()
+            update(constant.teachersDb)
         case 9:
-            showInfoTeacher()
+            show(constant.teachersDb)
         case 10:
-            showAllTeachers()
+            showAll(constant.teachersDb)
         case 11:
             search()
         case 0:
@@ -48,6 +49,16 @@ def determineSelection(selection):
             exit()
     input("Press Enter to back Menu...\n")
 
+def solveLoginSelection():
+    while 1:
+        result = login()
+
+        if result:
+            while 1:
+                showMenu()
+                determineSelection(getSelection(0, 11))
+        else:
+            print("Login Fail!!! Try again !!!")
 def main():
     print("\n\t\t\tStudent Management System")
     print("\t-------------------------------------------------\t")
@@ -58,20 +69,13 @@ def main():
     
     selection = getSelection(0, 2)
     if selection == 1:
-        while 1:
-            result = login()
-
-            if result:
-                while 1:
-                    showMenu()
-                    determineSelection(getSelection(0, 11))
-            else:
-                print("Login Fail!!! Try again !!!")
+        solveLoginSelection()
     elif selection == 2:
         result = signUp()
         if result:
             main()
     elif selection == 0:
         exit()
+
 if __name__ == "__main__":
     main()

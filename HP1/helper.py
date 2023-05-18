@@ -1,4 +1,5 @@
 from validate import *
+import constant
 
 class Person():
     def __init__(self, fName, lName, sex) -> None:
@@ -44,10 +45,9 @@ class Account():
         self.userName = userName
         self.passWord = passWord
 
-    def toString(self):
-        return self.userName + " " + self.passWord
+def getGeneralInformation(db = constant.studentsDb):
+    obj = determineTextToShow(db)
 
-def getGeneralInformation(obj = "Student"):
     fName = getString(f"First Name's {obj}: ")
     lName = getString(f"Last Name's {obj}: ")
     grade = getNumber(f"Class's {obj}: from 1 -> 12 ", 1, 12)
@@ -58,7 +58,7 @@ def getGeneralInformation(obj = "Student"):
 def getSelection(optionMin, optionMax):
     return getNumber("Your choose is: ", optionMin, optionMax)
 
-def handleStundetInDB(action, data, db = "db/students.txt"):
+def handleStundetInDB(action, data, db = constant.studentsDb):
     if action == "add" :
         with open(db, "r+") as f:
             idLast = ""
@@ -66,8 +66,9 @@ def handleStundetInDB(action, data, db = "db/students.txt"):
             if len(all) == 0:
                 idLast = 999
             else:
-                txtSplit = "STU" if db == "db/students.txt" else "TEA"
+                txtSplit = "STU" if db == constant.studentsDb else "TEA"
                 idLast = int(all[-1].split("-")[0].split(txtSplit)[1])
+
             data.configId(idLast)
             f.writelines(data.toString())
 
@@ -85,13 +86,14 @@ def handleStundetInDB(action, data, db = "db/students.txt"):
     if action == "upd":
         with open(db, "r") as f:
             all = f.readlines()
-            obj = "Student" if db == "db/students.txt" else "Teacher"
+            obj = determineTextToShow(db)
             info = getGeneralInformation(obj)
             id = all[data].split("-")[0] # get id
+
             newObj = id + "-" + info[0] + "-" + info[1] + "-" + str(info[2]) + "-" 
             newObj += "Female" if info[3] == "f" else "Male"
 
-            if db == "db/teachers.txt":
+            if db == constant.teachersDb:
                 isGraduated = True if getByOption("You have been graduated? (y/n): ", ['y','n']) == "y" else False
                 school = getString("Your school: ")
                 newObj += "-True" if isGraduated else "-False"
@@ -103,6 +105,7 @@ def handleStundetInDB(action, data, db = "db/students.txt"):
                 filedata.writelines(all)
 
             return True
+        
     if action == "get":
         with open(db, "r") as f:
             all = f.readlines()
@@ -111,25 +114,30 @@ def handleStundetInDB(action, data, db = "db/students.txt"):
         
     return False
 
-def readFiles(fileName = "db/students.txt"):
+def readFiles(fileName = constant.studentsDb):
     with open(fileName, "r") as file:
-        return [ line for line in file ]
+        return file.readlines()
 
 def getAccounts():
-    return [Account(account.split(",")[0], account.split(",")[1].replace("\n", "")) for account in readFiles("db/accounts.txt")]
+    return [Account(account.split(",")[0], account.split(",")[1].replace("\n", "")) for account in readFiles(constant.accountsDb)]
 
-def getIds(db = "db/students.txt"):
+def getIds(db = constant.studentsDb):
     return [student.split("-")[0] for student in readFiles(db)]
 
-def chooseStudentToAction(obj = "Student"):
-    ids = getIds() if obj == "Student" else getIds("db/teachers.txt")
+def chooseStudentToAction(db = constant.studentsDb):
+    ids = getIds() if db == constant.studentsDb else getIds(constant.teachersDb)
     idsString = ", ".join(ids)
-    print(f"All ID of {obj} in DB: {idsString}")
+
+    txt = determineTextToShow(db)
+    print(f"All ID of {txt} in DB: {idsString}")
+
     while 1:
         id = getString("Choose one of these ID to delete? Your choose: ")
 
         if id not in ids:
-            print("No matching ID")
+            print("ID input was not matching with each other!!! Try again!!!\n")
         else:
             return ids.index(id)
         
+def determineTextToShow(db = constant.studentsDb):
+    return constant.student if db == constant.studentsDb else constant.teacher

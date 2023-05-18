@@ -1,0 +1,5 @@
+teachersDb = "db/teachers.txt"
+studentsDb = "db/students.txt"
+accountsDb = "db/accounts.txt"
+teacher = "Teacher"
+student = "Student"
