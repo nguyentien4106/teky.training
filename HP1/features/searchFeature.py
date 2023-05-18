@@ -1,6 +1,6 @@
-from helper import *
+from helper.helper import *
 from tabulate import tabulate
-import constant
+import helper.constant as constant
 
 def search():
     print("\n\t\tChoose Your Search Function!!!")
@@ -34,7 +34,7 @@ def searchByName():
     print("\t\t\tStudents")
     print(tabulate(studentFilterShow, headers=['ID', 'First Name', "Last Name", "Grade", "Sex"]))
     print("\t\t\tTeachers")
-    print(tabulate(teachersFilterShow, headers=['ID', 'First Name', "Last Name", "Grade", "Sex", "isGraduated", "School"]))
+    print(tabulate(teachersFilterShow, headers=['ID', 'First Name', "Last Name", "Grade", "Sex", "Graduated", "School"]))
 
 
 def searchByGrade():

@@ -1,7 +1,7 @@
-from helper import *
-from validate import *
+from helper.helper import *
+from helper.validate import *
 from tabulate import tabulate
-import constant
+import helper.constant as constant
 
 def addNew(db = constant.studentsDb):
     info = getGeneralInformation(determineWhatTypeOfObject(db))
@@ -44,5 +44,3 @@ def showAll(db = constant.studentsDb):
         print(tabulate(all, headers=['ID', 'First Name', "Last Name", "Grade", "Sex"]))
     else:
         print(tabulate(all, headers=['ID', 'First Name', "Last Name", "Grade", "Sex", "Graduated", "School"]))
-
-        

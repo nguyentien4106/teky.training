@@ -1,10 +1,11 @@
-from validate import *
-import constant
+from helper.validate import *
+import helper.constant as constant
 
 class Person():
-    def __init__(self, fName, lName, sex) -> None:
+    def __init__(self, fName, lName, grade, sex) -> None:
         self.fName = fName
         self.lName = lName
+        self.grade = grade
         self.sex = sex
 
     def configId(self):
@@ -14,8 +15,7 @@ class Person():
 
 class Student(Person):
     def __init__(self, fName, lName, grade, sex):
-        super().__init__(fName, lName, sex)
-        self.grade = grade
+        super().__init__(fName, lName, grade, sex)
         self.id = str(grade) + sex.upper() + "STU"
 
     def configId(self, id):
@@ -27,8 +27,7 @@ class Student(Person):
 
 class Teacher(Person):
     def __init__(self, fName, lName, grade, sex, isGraduated, school):
-        super().__init__(fName, lName, sex)
-        self.grade = grade
+        super().__init__(fName, lName, grade, sex)
         self.isGraduated = isGraduated
         self.school = school
         self.id = str(grade) + sex.upper() + "TEA"
@@ -50,13 +49,13 @@ def getGeneralInformation(db = constant.studentsDb):
 
     fName = getString(f"First Name's {obj}: ")
     lName = getString(f"Last Name's {obj}: ")
-    grade = getNumber(f"Class's {obj}: from 1 -> 12 ", 1, 12)
+    grade = getNumber(f"Class's {obj} (Valid value from 1 -> 12)", 1, 12)
     sex = getByOption(f"Sex's {obj}: Female (f) or Male (m): ", ["f", "m"])
 
     return (fName, lName, grade, sex)
 
 def getSelection(optionMin, optionMax):
-    return getNumber("Your choose is: ", optionMin, optionMax)
+    return getNumber(f"Your choice (Valid value from {optionMin} -> {optionMax}): ", optionMin, optionMax)
 
 def handleStundetInDB(action, data, db = constant.studentsDb):
     if action == "add" :

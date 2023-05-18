@@ -1,10 +1,10 @@
-from searchFeature import *
-from commonFeature import *
-from auth import *
-import constant
+from features.searchFeature import *
+from features.commonFeature import *
+from features.auth import *
+import helper.constant as constant
 
 def showMenu():
-    print("\n\t\t\tStudent Management System")
+    print("\n\t\t\tHuman Resources Management in School")
     print("\t-------------------------------------------------\t")
     print("/*\t1. Add Stundent\t\t\t\t\t*/")
     print("/*\t2. Delete Student\t\t\t\t*/")

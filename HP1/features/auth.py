@@ -1,6 +1,6 @@
-from helper import *
+from helper.helper import *
 import pwinput
-import constant
+import helper.constant as constant
 
 def login():
     userName = getString("Please input username: ")
