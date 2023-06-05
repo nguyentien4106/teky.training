@@ -4,3 +4,6 @@ minWidthChildWindow = 400
 minHeightChildWindow = 300
 maxWidthChildWindow = 300
 maxHeightChildWindow = 200
+teachersDb = "db/teachers.txt"
+studentsDb = "db/students.txt"
+accountsDb = "db/accounts.txt"

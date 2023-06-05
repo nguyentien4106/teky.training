@@ -1,0 +1,21 @@
+body{
+    background: #fff;
+    font-family: "Quicksand",sans-serif;
+    font-size: 14px;
+}
+
+.header{
+    background-color: #5DC2A7;
+    height: 100px;
+}
+
+.navbar{
+    width: 80%;
+    height: 5%;
+}
+
+.nav-item{
+    text-decoration: none;
+    list-style: none;
+    margin: 10px;
+}

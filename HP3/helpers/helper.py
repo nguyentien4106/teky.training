@@ -1,5 +1,12 @@
 from tkinter import *
 import helpers.constant as constant
+from pathlib import Path
+
+class Account():
+    def __init__(self, userName, passWord) -> None:
+        self.userName = userName
+        self.passWord = passWord
+
 def showLabel(gui, text, font = constant.defaultFont, x = 0, y = 0, width = 50, height = 1, side=None, padx = 0, pady=0, anchor="center", input=None):
     label = Label(gui, text=text, font=font, width=width, height=height, anchor=anchor)
     if side:
@@ -19,27 +26,36 @@ def showButton(gui, text, width = 3, command = None, font = constant.defaultFont
     if side:
         button.pack(side=side, padx=padx, pady=pady)
 
-def showTextBox(gui, width = 3, height = 1, font = constant.defaultFont, x = 0, y = 0, side=None, padx=0, pady=0):
-    text = Text(gui, font=font, width=width, height=height)
-    text.place(x=x, y=y)
-
-def setWindow(gui : Tk, geometry, minWidth, minHeight, maxWidth, maxHeight):
+def setWindow(gui : Tk, title, geometry, minWidth, minHeight, maxWidth, maxHeight):
     gui.geometry(geometry)
     gui.maxsize(maxWidth, maxHeight)
     gui.minsize(minWidth, minHeight)
+    gui.title(title)
 
-def renderRow(root, side=TOP, fill="x", anchor="c"):
-    row = Frame(root,  borderwidth=2, relief="solid")
-    row.pack(side=side, fill=fill, anchor=anchor)
-    
-    return row
+def readFiles(fileName = constant.studentsDb):
+    path = Path(__file__).parent.absolute().parent.absolute().joinpath(fileName)
 
-def renderLabel(root, text, font = "Times 11", width = 15, height = 1, anchor="center", side=LEFT, padx=0, pady=0):
-    label = Label(root, text=text, font=font, width=width, height=height, anchor=anchor, borderwidth=2)
-    label.pack(side=side, padx=padx, pady=pady)
+    with open(path, "r") as file:
+        return file.readlines()
 
-def renderEntry(root, font = "Times 11", width = 30, side=LEFT, padx=0, pady=0, fill='x'):
-    entry = Entry(root, width=width, font=font) #Create input boxes
-    entry.pack(side=side, padx=padx, pady=pady, fill=fill)
+def getAccounts():
+    return [Account(account.split(",")[0], account.split(",")[1].replace("\n", "")) for account in readFiles(constant.accountsDb)]
 
-    return entry
+
+
+def center(win):
+    """
+    centers a tkinter window
+    :param win: the main window or Toplevel window to center
+    """
+    win.update_idletasks()
+    width = win.winfo_width()
+    frm_width = win.winfo_rootx() - win.winfo_x()
+    win_width = width + 2 * frm_width
+    height = win.winfo_height()
+    titlebar_height = win.winfo_rooty() - win.winfo_y()
+    win_height = height + titlebar_height + frm_width
+    x = win.winfo_screenwidth() // 2 - win_width // 2
+    y = win.winfo_screenheight() // 2 - win_height // 2
+    win.geometry('{}x{}+{}+{}'.format(width, height, x, y))
+    win.deiconify()

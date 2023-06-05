@@ -78,4 +78,10 @@ def main():
         exit()
 
 if __name__ == "__main__":
-    main()
+    
+    math = float(input("Điểm môn toán của bạn là bao nhiêu ? "))
+    lecture = float(input("Điểm môn văn của bạn là bao nhiêu ? "))
+    english = float(input("Điểm môn tiếng anh của bạn là bao nhiêu ? "))
+
+    sum = math + lecture + english 
+    print(sum)
