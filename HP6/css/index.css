@@ -19,3 +19,17 @@ body{
     list-style: none;
     margin: 10px;
 }
+
+.hide{
+    display: none;
+}
+.show{
+    display: block;
+}
+
+a.nav-link:hover .hide{
+    background-color: red;
+}
+a.nav-link:hover span.hide {
+    display: block;
+}
